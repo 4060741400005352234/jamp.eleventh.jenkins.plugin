@@ -17,22 +17,6 @@ import org.kohsuke.stapler.QueryParameter;
 import javax.servlet.ServletException;
 import java.io.IOException;
 
-/**
- * Sample {@link Builder}.
- *
- * <p>
- * When the user configures the project and enables this builder,
- * {@link DescriptorImpl#newInstance(StaplerRequest)} is invoked
- * and a new {@link HelloWorldBuilder} is created. The created
- * instance is persisted to the project configuration XML by using
- * XStream, so this allows you to use instance fields (like {@link #name})
- * to remember the configuration.
- *
- * <p>
- * When a build is performed, the {@link #perform} method will be invoked. 
- *
- * @author Kohsuke Kawaguchi
- */
 public class HelloWorldBuilder extends Builder implements SimpleBuildStep {
 
     private final String name;
@@ -52,19 +36,12 @@ public class HelloWorldBuilder extends Builder implements SimpleBuildStep {
 
     @Override
     public void perform(Run<?,?> build, FilePath workspace, Launcher launcher, TaskListener listener) {
-        // This is where you 'build' the project.
-        // Since this is a dummy, we just say 'hello world' and call that a build.
-
-        // This also shows how you can consult the global configuration of the builder
         if (getDescriptor().getUseFrench())
             listener.getLogger().println("Bonjour, "+name+"!");
         else
             listener.getLogger().println("Hello, "+name+"!");
     }
 
-    // Overridden for better type safety.
-    // If your plugin doesn't really define any property on Descriptor,
-    // you don't have to do this.
     @Override
     public DescriptorImpl getDescriptor() {
         return (DescriptorImpl)super.getDescriptor();
@@ -141,12 +118,6 @@ public class HelloWorldBuilder extends Builder implements SimpleBuildStep {
             return super.configure(req,formData);
         }
 
-        /**
-         * This method returns true if the global configuration says we should speak French.
-         *
-         * The method name is bit awkward because global.jelly calls this method to determine
-         * the initial state of the checkbox by the naming convention.
-         */
         public boolean getUseFrench() {
             return useFrench;
         }
